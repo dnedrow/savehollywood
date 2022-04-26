@@ -151,14 +151,7 @@ NSUInteger random_no(NSUInteger n)
     
     if (self!=nil)
     {
-		SInt32 tMajorVersion,tMinorVersion,tBugFixVersion;
-		
-		Gestalt(gestaltSystemVersionMajor,&tMajorVersion);
-		Gestalt(gestaltSystemVersionMinor,&tMinorVersion);
-		Gestalt(gestaltSystemVersionBugFix,&tBugFixVersion);
-		
-		
-		_useKeyedArchiverForLeftOffData=(tMajorVersion>10 || (tMajorVersion==10 && tMinorVersion>=12));
+        _useKeyedArchiverForLeftOffData=[NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){11,5,0}];
 		
 		[self setAnimationTimeInterval:1.0];
         
