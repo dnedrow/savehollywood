@@ -43,14 +43,14 @@ CGFloat heightForStringDrawing(NSAttributedString *myString, CGFloat myWidth)
     if (self!=nil)
     {
         NSMutableParagraphStyle * tMutableParagraphStyle=[[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        tMutableParagraphStyle.alignment=NSCenterTextAlignment;
+        tMutableParagraphStyle.alignment=NSTextAlignmentCenter;
         
 		NSShadow * tShadow=[NSShadow new];
 		tShadow.shadowOffset=NSMakeSize(0,-1);
 		tShadow.shadowColor=[NSColor colorWithDeviceWhite:0.65 alpha:1.0];
         
 		_attributesDictionary=[@{NSForegroundColorAttributeName:[NSColor whiteColor],
-								NSFontAttributeName:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSRegularControlSize]],
+                                 NSFontAttributeName:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeRegular]],
 								NSParagraphStyleAttributeName:tMutableParagraphStyle,
 								 NSShadowAttributeName:tShadow} copy];
 								
@@ -101,7 +101,7 @@ CGFloat heightForStringDrawing(NSAttributedString *myString, CGFloat myWidth)
     
     if (_cachedStringValue!=nil)
     {
-        CGFloat tHeight=[NSFont systemFontSizeForControlSize:NSRegularControlSize];//heightForStringDrawing(_cachedStringValue,tBounds.size.width);
+        CGFloat tHeight=[NSFont systemFontSizeForControlSize:NSControlSizeRegular];//heightForStringDrawing(_cachedStringValue,tBounds.size.width);
         
         tBounds.origin.y=round(NSMidY(tBounds)-tHeight*0.5+1);
         tBounds.size.height=tHeight;

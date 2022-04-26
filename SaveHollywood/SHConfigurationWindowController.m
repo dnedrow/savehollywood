@@ -212,13 +212,13 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     
     BOOL tBool=[tDefaults boolForKey:SHUserDefaultsAssetsRandomOrder];
     
-    [_randomOrderCheckBox setState:(tBool==YES) ? NSOnState : NSOffState];
+    [_randomOrderCheckBox setState:(tBool==YES) ? NSControlStateValueOn : NSControlStateValueOff];
     
         // Start where left off
     
     tBool=[tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff];
     
-    [_resumePlayingCheckBox setState:(tBool==YES) ? NSOnState : NSOffState];
+    [_resumePlayingCheckBox setState:(tBool==YES) ? NSControlStateValueOn : NSControlStateValueOff];
     
         // List
     
@@ -257,19 +257,19 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     
     tBool=[tDefaults boolForKey:SHUserDefaultsFrameRandomPosition];
     
-    [_frameRandomPositionCheckBox setState:(tBool==YES) ? NSOnState : NSOffState];
+    [_frameRandomPositionCheckBox setState:(tBool==YES) ? NSControlStateValueOn : NSControlStateValueOff];
     
         // Draw Border
     
     tBool=[tDefaults boolForKey:SHUserDefaultsFrameDrawBorder];
     
-    [_frameDrawBorderCheckBox setState:(tBool==YES) ? NSOnState : NSOffState];
+    [_frameDrawBorderCheckBox setState:(tBool==YES) ? NSControlStateValueOn : NSControlStateValueOff];
     
         // Show Metadata
     
     tBool=[tDefaults boolForKey:SHUserDefaultsFrameShowMetadata];
     
-    [_frameShowMetatadaCheckBox setState:(tBool==YES) ? NSOnState : NSOffState];
+    [_frameShowMetatadaCheckBox setState:(tBool==YES) ? NSControlStateValueOn : NSControlStateValueOff];
     
     [_frameShowMetatadaModeMatrix setEnabled:tBool];
     
@@ -339,7 +339,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     
     tBool=[tDefaults boolForKey:SHUserDefaultsMainDisplayOnly];
     
-    [_mainScreenCheckBox setState:(tBool==YES) ? NSOnState : NSOffState];
+    [_mainScreenCheckBox setState:(tBool==YES) ? NSControlStateValueOn : NSControlStateValueOff];
     
     [_assetsTableView reloadData];
 }
@@ -648,7 +648,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 
 - (IBAction)switchShowMetadata:(id)sender
 {
-    BOOL tBool=([sender state]==NSOnState);
+    BOOL tBool=([sender state]==NSControlStateValueOn);
     NSInteger tTag=[[_frameShowMetatadaModeMatrix selectedCell] tag];
     
     [_frameShowMetatadaModeMatrix setEnabled:tBool];
@@ -702,7 +702,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 
 - (IBAction)closeDialog:(id)sender
 {
-    if ([sender tag]==NSOKButton)
+    if ([sender tag]==NSModalResponseOK)
     {
 #ifdef __TEST_SCREENSAVER__
         NSUserDefaults *tDefaults = [NSUserDefaults standardUserDefaults];
@@ -716,11 +716,11 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         
             // Random Order
         
-        [tDefaults setBool:([_randomOrderCheckBox state]==NSOnState) forKey:SHUserDefaultsAssetsRandomOrder];
+        [tDefaults setBool:([_randomOrderCheckBox state]==NSControlStateValueOn) forKey:SHUserDefaultsAssetsRandomOrder];
         
             // Start where left off
         
-        [tDefaults setBool:([_resumePlayingCheckBox state]==NSOnState) forKey:SHUserDefaultsAssetsStartWhereLeftOff];
+        [tDefaults setBool:([_resumePlayingCheckBox state]==NSControlStateValueOn) forKey:SHUserDefaultsAssetsStartWhereLeftOff];
 
             // List
         
@@ -747,15 +747,15 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         
             // Random Position
         
-        [tDefaults setBool:([_frameRandomPositionCheckBox state]==NSOnState) forKey:SHUserDefaultsFrameRandomPosition];
+        [tDefaults setBool:([_frameRandomPositionCheckBox state]==NSControlStateValueOn) forKey:SHUserDefaultsFrameRandomPosition];
         
             // Draw Border
         
-        [tDefaults setBool:([_frameDrawBorderCheckBox state]==NSOnState) forKey:SHUserDefaultsFrameDrawBorder];
+        [tDefaults setBool:([_frameDrawBorderCheckBox state]==NSControlStateValueOn) forKey:SHUserDefaultsFrameDrawBorder];
         
             // Show Metadata
         
-        [tDefaults setBool:([_frameShowMetatadaCheckBox state]==NSOnState) forKey:SHUserDefaultsFrameShowMetadata];
+        [tDefaults setBool:([_frameShowMetatadaCheckBox state]==NSControlStateValueOn) forKey:SHUserDefaultsFrameShowMetadata];
         
             // Show Metadata mode
         
@@ -780,7 +780,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         
         // Audio
         
-        [tDefaults setBool:([_audioMainScreenCheckBox state]==NSOnState) forKey:SHUserDefaultsAudioMainDisplayOnly];
+        [tDefaults setBool:([_audioMainScreenCheckBox state]==NSControlStateValueOn) forKey:SHUserDefaultsAudioMainDisplayOnly];
         
         // Volume
         
@@ -793,7 +793,7 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         
         // Main Screen Only
         
-        [tDefaults setBool:([_mainScreenCheckBox state]==NSOnState) forKey:SHUserDefaultsMainDisplayOnly];
+        [tDefaults setBool:([_mainScreenCheckBox state]==NSControlStateValueOn) forKey:SHUserDefaultsMainDisplayOnly];
         
         [tDefaults synchronize];
     }

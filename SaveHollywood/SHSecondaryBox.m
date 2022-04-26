@@ -35,7 +35,7 @@
 	
 	NSRect tFrameRect=NSInsetRect([self bounds],-1,0);
 	
-	NSFrameRectWithWidthUsingOperation(tFrameRect, 1.0, NSCompositeSourceOver);
+    NSFrameRectWithWidthUsingOperation(tFrameRect, 1.0, NSCompositingOperationSourceOver);
 }
 
 @end
