@@ -224,7 +224,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
     NSArray *tAssetsArray = [tDefaults objectForKey:SHUserDefaultsAssetsLibrary];
 
     for (NSString *tPath in tAssetsArray) {
-        NSMutableDictionary *tMutableDictionary = [NSMutableDictionary dictionaryWithObject:tPath forKey:SHConfigurationAssetPath];
+        NSMutableDictionary *tMutableDictionary = [@{SHConfigurationAssetPath: tPath} mutableCopy];
         BOOL isDirectory;
 
         if ([tFileManager fileExistsAtPath:tPath isDirectory:&isDirectory] == YES) {
@@ -549,7 +549,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                 NSString *tPath = [tURL path];
                 BOOL tFound = NO;
 
-                NSMutableDictionary *tMutableDictionary = [NSMutableDictionary dictionaryWithObject:tPath forKey:SHConfigurationAssetPath];
+                NSMutableDictionary *tMutableDictionary = [@{SHConfigurationAssetPath: tPath} mutableCopy];
                 BOOL isDirectory;
 
                 if ([tFileManager fileExistsAtPath:tPath isDirectory:&isDirectory] == YES)
@@ -841,7 +841,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 - (BOOL)tableView:(NSTableView *)inTableView writeRowsWithIndexes:(NSIndexSet *)inIndexSet toPasteboard:(NSPasteboard *)inPasteboard {
     if (inTableView == _assetsTableView) {
         if ([inIndexSet count] > 0) {
-            [inPasteboard declareTypes:[NSArray arrayWithObject:SHPasteboardTypeSelectedRows] owner:nil];
+            [inPasteboard declareTypes:@[SHPasteboardTypeSelectedRows] owner:nil];
 
             [_internalDragData release];
             _internalDragData = [inIndexSet retain];
@@ -968,7 +968,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
                     if ([tFileManager fileExistsAtPath:tFile isDirectory:&isDirectory] == YES) {
                         if (isDirectory == YES) {
-                            NSMutableDictionary *tMutableDictionary = [NSMutableDictionary dictionaryWithObject:tFile forKey:SHConfigurationAssetPath];
+                            NSMutableDictionary *tMutableDictionary = [@{SHConfigurationAssetPath: tFile} mutableCopy];
 
                             tMutableDictionary[SHConfigurationAssetFolder] = @(YES);
 
@@ -980,7 +980,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                                 AVURLAsset *tAVAsset = [AVURLAsset URLAssetWithURL:tFileURL options:nil];
 
                                 if (tAVAsset.isPlayable == YES) {
-                                    NSMutableDictionary *tMutableDictionary = [NSMutableDictionary dictionaryWithObject:tFile forKey:SHConfigurationAssetPath];
+                                    NSMutableDictionary *tMutableDictionary = [@{SHConfigurationAssetPath: tFile} mutableCopy];
 
                                     tMutableDictionary[SHConfigurationAssetFolder] = @(NO);
 
@@ -1049,6 +1049,12 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
 - (void)shouldHideValueLabel:(NSNotification *)inNotification {
     [_frameShowMetatadaPeriodLiveValueLabel setHidden:YES];
+}
+
+- (void)dealloc {
+    [_cachedAssetsArray release];
+    [_internalDragData release];
+    [super dealloc];
 }
 
 @end

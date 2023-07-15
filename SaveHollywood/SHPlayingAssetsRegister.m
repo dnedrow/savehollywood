@@ -86,4 +86,10 @@
     [_lock unlock];
 }
 
+- (void)dealloc {
+    [_playingAssetsSet release];
+    [_lock release];
+    [super dealloc];
+}
+
 @end

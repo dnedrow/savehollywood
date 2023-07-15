@@ -164,4 +164,10 @@ static BOOL sSettingsAreLocked = NO;
     self.mainDisplayOnly = NO;
 }
 
+- (void)dealloc {
+    [_assets release];
+    [_backgroundColor release];
+    [super dealloc];
+}
+
 @end

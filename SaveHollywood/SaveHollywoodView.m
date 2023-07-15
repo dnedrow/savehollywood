@@ -816,7 +816,7 @@ NSUInteger random_no(NSUInteger n) {
             break;
     }
 
-    NSValue *tValue = [preferredNextAssetDictionary objectForKey:SHAssetTimeKey];
+    NSValue *tValue = preferredNextAssetDictionary[SHAssetTimeKey];
 
     if (tValue != nil) {
         CMTime tSeekTime = [tValue CMTimeValue];
@@ -881,7 +881,7 @@ NSUInteger random_no(NSUInteger n) {
             _timer = [[NSTimer scheduledTimerWithTimeInterval:_metadadataPeriod target:self selector:@selector(showMetadata:) userInfo:nil repeats:YES] retain];
         }
 
-        [tAVPlayerItem.asset loadValuesAsynchronouslyForKeys:[NSArray arrayWithObject:@"availableMetadataFormats"] completionHandler:^() {
+        [tAVPlayerItem.asset loadValuesAsynchronouslyForKeys:@[@"availableMetadataFormats"] completionHandler:^() {
 
             if ([tAVPlayerItem.asset statusOfValueForKey:@"availableMetadataFormats" error:NULL] == AVKeyValueStatusLoaded) {
                 NSArray *tAvailableMetadataFormats = [tAVPlayerItem.asset availableMetadataFormats];
@@ -1077,6 +1077,13 @@ NSUInteger random_no(NSUInteger n) {
             _volumeLevelHasBeenModified = YES;
         }
     }
+}
+
+- (void)dealloc {
+    [__assetsArray release];
+    [_timer release];
+    [_configurationWindowController release];
+    [super dealloc];
 }
 
 @end

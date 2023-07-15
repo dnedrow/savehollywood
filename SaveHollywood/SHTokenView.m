@@ -60,7 +60,8 @@ CGFloat heightForStringDrawing(NSAttributedString *myString, CGFloat myWidth) {
 
 - (void)dealloc {
     [_attributesDictionary release];
-
+    [_cachedStringValue release];
+    [_cachedStringValue release];
     [super dealloc];
 }
 
