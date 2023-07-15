@@ -1,4 +1,4 @@
-savehollywood
+SaveHollywood
 =============
 
 SaveHollywood Screen Saver

@@ -57,8 +57,8 @@ NSUInteger random_no(NSUInteger n) {
 
     BOOL _drawBorder;
     BOOL _showMetadata;
-    NSInteger _metadadataMode;
-    NSInteger _metadadataPeriod;
+    NSInteger _metadataMode;
+    NSInteger _metadataPeriod;
 
     NSTimer *_timer;
     BOOL _liveMuted;
@@ -298,9 +298,9 @@ NSUInteger random_no(NSUInteger n) {
 
             _showMetadata = tSettings.showMetadata;
 
-            _metadadataMode = tSettings.showMetadataMode;
+            _metadataMode = tSettings.showMetadataMode;
 
-            _metadadataPeriod = tSettings.showMetadataPeriod;
+            _metadataPeriod = tSettings.showMetadataPeriod;
 
             // Random Position
 
@@ -482,7 +482,7 @@ NSUInteger random_no(NSUInteger n) {
             tWarningTextLayer.alignmentMode = kCAAlignmentCenter;
             tWarningTextLayer.foregroundColor = CGColorGetConstantColor(kCGColorWhite);
 
-            if (_preview == YES) {
+            if (_preview) {
                 tWarningTextLayer.fontSize = 16;
 
                 tFrame = CGRectInset(tBackgroundFrame, 20., 0);
@@ -529,7 +529,7 @@ NSUInteger random_no(NSUInteger n) {
 
     // Stop Movie
 
-    if (_preview == NO) {
+    if (!_preview) {
         // Save current asset and time if necessary
 
         NSUInteger tScreenIndex = [self screenIndex];
@@ -537,7 +537,7 @@ NSUInteger random_no(NSUInteger n) {
         if (tScreenIndex != NSNotFound) {
             NSString *tScreenKey;
 
-            if (_useKeyedArchiverForLeftOffData == YES)
+            if (_useKeyedArchiverForLeftOffData)
                 tScreenKey = [NSString stringWithFormat:@"%@%lu", SHScreenKeyKeyed, (unsigned long) tScreenIndex];
             else
                 tScreenKey = [NSString stringWithFormat:@"%@%lu", SHScreenKey, (unsigned long) tScreenIndex];
@@ -830,12 +830,12 @@ NSUInteger random_no(NSUInteger n) {
 
     [_AVPlayerLayer.player play];
 
-    if (_preview == NO && _showMetadata == YES) {
+    if (!_preview && _showMetadata) {
         CATextLayer *tTitleLayer;
         CATextLayer *tCopyrightLayer;
 
         if (_metadataLayer == nil) {
-            CGColorRef tTranslucidBlackColor = CGColorCreateGenericGray(0.0, 0.5);
+            CGColorRef translucentBlackColor = CGColorCreateGenericGray(0.0, 0.5);
             CGRect tRect = _backgroundLayer.bounds;
 
             tRect.size.height = 70;
@@ -845,9 +845,9 @@ NSUInteger random_no(NSUInteger n) {
             _metadataLayer = [CALayer layer];
 
             _metadataLayer.frame = tRect;
-            _metadataLayer.backgroundColor = tTranslucidBlackColor;
+            _metadataLayer.backgroundColor = translucentBlackColor;
 
-            CFRelease(tTranslucidBlackColor);
+            CFRelease(translucentBlackColor);
 
             [_backgroundLayer insertSublayer:_metadataLayer
                                        above:_AVPlayerLayer];
@@ -877,8 +877,8 @@ NSUInteger random_no(NSUInteger n) {
             tCopyrightLayer = (CATextLayer *) [_metadataLayer sublayers][1];
         }
 
-        if (_metadadataMode == kMovieFrameShowMetadataPeriodically) {
-            _timer = [[NSTimer scheduledTimerWithTimeInterval:_metadadataPeriod target:self selector:@selector(showMetadata:) userInfo:nil repeats:YES] retain];
+        if (_metadataMode == kMovieFrameShowMetadataPeriodically) {
+            _timer = [[NSTimer scheduledTimerWithTimeInterval:_metadataPeriod target:self selector:@selector(showMetadata:) userInfo:nil repeats:YES] retain];
         }
 
         [tAVPlayerItem.asset loadValuesAsynchronouslyForKeys:@[@"availableMetadataFormats"] completionHandler:^() {
@@ -918,7 +918,7 @@ NSUInteger random_no(NSUInteger n) {
                         tTitleLayer.string = _currentAssetMetadataTitle;
                         tCopyrightLayer.string = _currentAssetMetadataCopyrights;
 
-                        if (_metadadataMode == kMovieFrameShowMetadataAtStart) {
+                        if (_metadataMode == kMovieFrameShowMetadataAtStart) {
                             [self performSelectorOnMainThread:@selector(showMetadata:)
                                                    withObject:nil
                                                 waitUntilDone:NO];
@@ -991,8 +991,8 @@ NSUInteger random_no(NSUInteger n) {
                 [tCurrentPlayer play];
 
                 if (_preview == NO && _showMetadata == YES) {
-                    if (_metadadataMode == kMovieFrameShowMetadataPeriodically) {
-                        _timer = [[NSTimer scheduledTimerWithTimeInterval:_metadadataPeriod target:self selector:@selector(showMetadata:) userInfo:nil repeats:YES] retain];
+                    if (_metadataMode == kMovieFrameShowMetadataPeriodically) {
+                        _timer = [[NSTimer scheduledTimerWithTimeInterval:_metadataPeriod target:self selector:@selector(showMetadata:) userInfo:nil repeats:YES] retain];
                     } else {
                         [self showMetadata:nil];
                     }

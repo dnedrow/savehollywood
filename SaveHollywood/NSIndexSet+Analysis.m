@@ -13,7 +13,7 @@
 
 #import "NSIndexSet+Analysis.h"
 
-@implementation NSIndexSet (Analaysis)
+@implementation NSIndexSet (Analysis)
 
 - (BOOL)containsOnlyOneRange {
     NSUInteger tCount = [self count];

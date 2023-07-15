@@ -55,10 +55,10 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
     IBOutlet NSButton *_frameRandomPositionCheckBox;
 
     IBOutlet NSButton *_frameDrawBorderCheckBox;
-    IBOutlet NSButton *_frameShowMetatadaCheckBox;
-    IBOutlet NSMatrix *_frameShowMetatadaModeMatrix;
-    IBOutlet SHSlider *_frameShowMetatadaPeriodSlider;
-    IBOutlet NSTextField *_frameShowMetatadaPeriodLiveValueLabel;
+    IBOutlet NSButton *_frameShowMetadataCheckBox;
+    IBOutlet NSMatrix *_frameShowMetadataModeMatrix;
+    IBOutlet SHSlider *_frameShowMetadataPeriodSlider;
+    IBOutlet NSTextField *_frameShowMetadataPeriodLiveValueLabel;
 
     IBOutlet NSColorWell *_backgroundColorWell;
 
@@ -181,12 +181,12 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(shouldShowValueLabel:)
                                                  name:SHSliderValueDidBeginEditingNotification
-                                               object:_frameShowMetatadaPeriodSlider];
+                                               object:_frameShowMetadataPeriodSlider];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(shouldHideValueLabel:)
                                                  name:SHSliderValueDidEndEditingNotification
-                                               object:_frameShowMetatadaPeriodSlider];
+                                               object:_frameShowMetadataPeriodSlider];
 }
 
 #pragma mark -
@@ -262,15 +262,15 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
     tBool = [tDefaults boolForKey:SHUserDefaultsFrameShowMetadata];
 
-    [_frameShowMetatadaCheckBox setState:(tBool == YES) ? NSControlStateValueOn : NSControlStateValueOff];
+    [_frameShowMetadataCheckBox setState:(tBool == YES) ? NSControlStateValueOn : NSControlStateValueOff];
 
-    [_frameShowMetatadaModeMatrix setEnabled:tBool];
+    [_frameShowMetadataModeMatrix setEnabled:tBool];
 
     tInteger = [tDefaults integerForKey:SHUserDefaultsFrameShowMetadataMode];
 
-    [_frameShowMetatadaModeMatrix selectCellWithTag:tInteger];
+    [_frameShowMetadataModeMatrix selectCellWithTag:tInteger];
 
-    [_frameShowMetatadaPeriodSlider setEnabled:(tBool == YES && (tInteger == kMovieFrameShowMetadataPeriodically))];
+    [_frameShowMetadataPeriodSlider setEnabled:(tBool == YES && (tInteger == kMovieFrameShowMetadataPeriodically))];
 
 
     if ([tDefaults objectForKey:SHUserDefaultsFrameShowMetadataPeriod] == nil)
@@ -278,10 +278,10 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
     else
         tInteger = [tDefaults integerForKey:SHUserDefaultsFrameShowMetadataPeriod];
 
-    [_frameShowMetatadaPeriodSlider setIntegerValue:tInteger];
-    [_frameShowMetatadaPeriodLiveValueLabel setStringValue:[NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"%ld seconds", @"Localized", [NSBundle bundleForClass:[self class]], @""), tInteger]];
+    [_frameShowMetadataPeriodSlider setIntegerValue:tInteger];
+    [_frameShowMetadataPeriodLiveValueLabel setStringValue:[NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"%ld seconds", @"Localized", [NSBundle bundleForClass:[self class]], @""), tInteger]];
 
-    [_frameShowMetatadaPeriodLiveValueLabel setHidden:YES];
+    [_frameShowMetadataPeriodLiveValueLabel setHidden:YES];
 
     // Background Color
 
@@ -599,21 +599,21 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
 - (IBAction)switchShowMetadata:(id)sender {
     BOOL tBool = ([sender state] == NSControlStateValueOn);
-    NSInteger tTag = [[_frameShowMetatadaModeMatrix selectedCell] tag];
+    NSInteger tTag = [[_frameShowMetadataModeMatrix selectedCell] tag];
 
-    [_frameShowMetatadaModeMatrix setEnabled:tBool];
+    [_frameShowMetadataModeMatrix setEnabled:tBool];
 
-    [_frameShowMetatadaPeriodSlider setEnabled:tBool && (tTag == kMovieFrameShowMetadataPeriodically)];
+    [_frameShowMetadataPeriodSlider setEnabled:tBool && (tTag == kMovieFrameShowMetadataPeriodically)];
 }
 
 - (IBAction)switchShowMetadataMode:(id)sender {
     NSInteger tTag = [[sender selectedCell] tag];
 
-    [_frameShowMetatadaPeriodSlider setEnabled:(tTag == kMovieFrameShowMetadataPeriodically)];
+    [_frameShowMetadataPeriodSlider setEnabled:(tTag == kMovieFrameShowMetadataPeriodically)];
 }
 
 - (IBAction)setPeriodWithSlider:(id)sender {
-    [_frameShowMetatadaPeriodLiveValueLabel setStringValue:[NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"%ld seconds", @"Localized", [NSBundle bundleForClass:[self class]], @""), [sender integerValue]]];
+    [_frameShowMetadataPeriodLiveValueLabel setStringValue:[NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"%ld seconds", @"Localized", [NSBundle bundleForClass:[self class]], @""), [sender integerValue]]];
 }
 
 - (IBAction)switchVolumeMode:(id)sender {
@@ -696,16 +696,16 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
         // Show Metadata
 
-        [tDefaults setBool:([_frameShowMetatadaCheckBox state] == NSControlStateValueOn) forKey:SHUserDefaultsFrameShowMetadata];
+        [tDefaults setBool:([_frameShowMetadataCheckBox state] == NSControlStateValueOn) forKey:SHUserDefaultsFrameShowMetadata];
 
         // Show Metadata mode
 
-        tInteger = [[_frameShowMetatadaModeMatrix selectedCell] tag];
+        tInteger = [[_frameShowMetadataModeMatrix selectedCell] tag];
 
         [tDefaults setInteger:tInteger forKey:SHUserDefaultsFrameShowMetadataMode];
 
         if (tInteger == kMovieFrameShowMetadataPeriodically)
-            [tDefaults setInteger:[_frameShowMetatadaPeriodSlider integerValue] forKey:SHUserDefaultsFrameShowMetadataPeriod];
+            [tDefaults setInteger:[_frameShowMetadataPeriodSlider integerValue] forKey:SHUserDefaultsFrameShowMetadataPeriod];
 
         // Color
 
@@ -1044,11 +1044,11 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 }
 
 - (void)shouldShowValueLabel:(NSNotification *)inNotification {
-    [_frameShowMetatadaPeriodLiveValueLabel setHidden:NO];
+    [_frameShowMetadataPeriodLiveValueLabel setHidden:NO];
 }
 
 - (void)shouldHideValueLabel:(NSNotification *)inNotification {
-    [_frameShowMetatadaPeriodLiveValueLabel setHidden:YES];
+    [_frameShowMetadataPeriodLiveValueLabel setHidden:YES];
 }
 
 - (void)dealloc {

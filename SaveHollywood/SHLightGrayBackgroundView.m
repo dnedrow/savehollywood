@@ -22,7 +22,7 @@
 #pragma mark -
 
 - (void)drawRect:(NSRect)dirtyRect {
-    if ([self isEffectiveAppareanceDarkAqua] == YES)
+    if ([self isEffectiveAppearanceDarkAqua])
         return;
 
     [[NSColor colorWithDeviceWhite:0.915 alpha:0.8] set];

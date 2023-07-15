@@ -19,11 +19,11 @@
 
 @implementation SHView
 
-- (BOOL)isEffectiveAppareanceDarkAqua {
+- (BOOL)isEffectiveAppearanceDarkAqua {
     if (NSAppKitVersionNumber < NSAppKitVersionNumber10_14)
         return NO;
 
-    if ([self conformsToProtocol:@protocol(NSAppearanceCustomization)] == NO)
+    if (![self conformsToProtocol:@protocol(NSAppearanceCustomization)])
         return NO;
 
     id tAppearance = self.effectiveAppearance;

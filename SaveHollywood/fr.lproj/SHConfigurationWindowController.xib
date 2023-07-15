@@ -1673,7 +1673,7 @@ y7bMNcy1zTXNtc42zrbPN8+40DnQutE80b7SP9LB00TTxtRJ1MvVTtXR1lXW2Ndc1+DYZNjo2WzZ8dp2
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">_frameShowMetatadaCheckBox</string>
+						<string key="label">_frameShowMetadataCheckBox</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="452993633"/>
 					</object>
@@ -1681,7 +1681,7 @@ y7bMNcy1zTXNtc42zrbPN8+40DnQutE80b7SP9LB00TTxtRJ1MvVTtXR1lXW2Ndc1+DYZNjo2WzZ8dp2
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">_frameShowMetatadaModeMatrix</string>
+						<string key="label">_frameShowMetadataModeMatrix</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="717582544"/>
 					</object>
@@ -1721,7 +1721,7 @@ y7bMNcy1zTXNtc42zrbPN8+40DnQutE80b7SP9LB00TTxtRJ1MvVTtXR1lXW2Ndc1+DYZNjo2WzZ8dp2
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">_frameShowMetatadaPeriodLiveValueLabel</string>
+						<string key="label">_frameShowMetadataPeriodLiveValueLabel</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="369004224"/>
 					</object>
@@ -1729,7 +1729,7 @@ y7bMNcy1zTXNtc42zrbPN8+40DnQutE80b7SP9LB00TTxtRJ1MvVTtXR1lXW2Ndc1+DYZNjo2WzZ8dp2
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">_frameShowMetatadaPeriodSlider</string>
+						<string key="label">_frameShowMetadataPeriodSlider</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="843937873"/>
 					</object>
@@ -2742,10 +2742,10 @@ y7bMNcy1zTXNtc42zrbPN8+40DnQutE80b7SP9LB00TTxtRJ1MvVTtXR1lXW2Ndc1+DYZNjo2WzZ8dp2
 						<string key="_frameDrawBorderCheckBox">NSButton</string>
 						<string key="_frameRandomPositionCheckBox">NSButton</string>
 						<string key="_frameScalingMatrix">NSMatrix</string>
-						<string key="_frameShowMetatadaCheckBox">NSButton</string>
-						<string key="_frameShowMetatadaModeMatrix">NSMatrix</string>
-						<string key="_frameShowMetatadaPeriodLiveValueLabel">NSTextField</string>
-						<string key="_frameShowMetatadaPeriodSlider">SHSlider</string>
+						<string key="_frameShowMetadataCheckBox">NSButton</string>
+						<string key="_frameShowMetadataModeMatrix">NSMatrix</string>
+						<string key="_frameShowMetadataPeriodLiveValueLabel">NSTextField</string>
+						<string key="_frameShowMetadataPeriodSlider">SHSlider</string>
 						<string key="_mainScreenCheckBox">NSButton</string>
 						<string key="_randomOrderCheckBox">NSButton</string>
 						<string key="_resumePlayingCheckBox">NSButton</string>
@@ -2787,20 +2787,20 @@ y7bMNcy1zTXNtc42zrbPN8+40DnQutE80b7SP9LB00TTxtRJ1MvVTtXR1lXW2Ndc1+DYZNjo2WzZ8dp2
 							<string key="name">_frameScalingMatrix</string>
 							<string key="candidateClassName">NSMatrix</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="_frameShowMetatadaCheckBox">
-							<string key="name">_frameShowMetatadaCheckBox</string>
+						<object class="IBToOneOutletInfo" key="_frameShowMetadataCheckBox">
+							<string key="name">_frameShowMetadataCheckBox</string>
 							<string key="candidateClassName">NSButton</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="_frameShowMetatadaModeMatrix">
-							<string key="name">_frameShowMetatadaModeMatrix</string>
+						<object class="IBToOneOutletInfo" key="_frameShowMetadataModeMatrix">
+							<string key="name">_frameShowMetadataModeMatrix</string>
 							<string key="candidateClassName">NSMatrix</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="_frameShowMetatadaPeriodLiveValueLabel">
-							<string key="name">_frameShowMetatadaPeriodLiveValueLabel</string>
+						<object class="IBToOneOutletInfo" key="_frameShowMetadataPeriodLiveValueLabel">
+							<string key="name">_frameShowMetadataPeriodLiveValueLabel</string>
 							<string key="candidateClassName">NSTextField</string>
 						</object>
-						<object class="IBToOneOutletInfo" key="_frameShowMetatadaPeriodSlider">
-							<string key="name">_frameShowMetatadaPeriodSlider</string>
+						<object class="IBToOneOutletInfo" key="_frameShowMetadataPeriodSlider">
+							<string key="name">_frameShowMetadataPeriodSlider</string>
 							<string key="candidateClassName">SHSlider</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="_mainScreenCheckBox">
