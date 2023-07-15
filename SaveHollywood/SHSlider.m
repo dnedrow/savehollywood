@@ -19,14 +19,14 @@ NSString *const SHSliderValueDidEndEditingNotification = @"SHSliderValueDidEndEd
 @implementation SHSlider
 
 - (void)mouseDown:(NSEvent *)inEvent {
-    if ([self isEnabled] == YES) {
+    if ([self isEnabled]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:SHSliderValueDidBeginEditingNotification
                                                             object:self];
     }
 
     [super mouseDown:inEvent];
 
-    if ([self isEnabled] == YES) {
+    if ([self isEnabled]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:SHSliderValueDidEndEditingNotification
                                                             object:self];
     }

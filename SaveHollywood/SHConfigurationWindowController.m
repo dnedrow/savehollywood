@@ -209,13 +209,13 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
     BOOL tBool = [tDefaults boolForKey:SHUserDefaultsAssetsRandomOrder];
 
-    [_randomOrderCheckBox setState:(tBool == YES) ? NSControlStateValueOn : NSControlStateValueOff];
+    [_randomOrderCheckBox setState:tBool ? NSControlStateValueOn : NSControlStateValueOff];
 
     // Start where left off
 
     tBool = [tDefaults boolForKey:SHUserDefaultsAssetsStartWhereLeftOff];
 
-    [_resumePlayingCheckBox setState:(tBool == YES) ? NSControlStateValueOn : NSControlStateValueOff];
+    [_resumePlayingCheckBox setState:tBool ? NSControlStateValueOn : NSControlStateValueOff];
 
     // List
 
@@ -227,7 +227,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
         NSMutableDictionary *tMutableDictionary = [@{SHConfigurationAssetPath: tPath} mutableCopy];
         BOOL isDirectory;
 
-        if ([tFileManager fileExistsAtPath:tPath isDirectory:&isDirectory] == YES) {
+        if ([tFileManager fileExistsAtPath:tPath isDirectory:&isDirectory]) {
             tMutableDictionary[SHConfigurationAssetFolder] = @(isDirectory);
         } else {
             tMutableDictionary[SHConfigurationAssetNotFound] = @(YES);
@@ -251,19 +251,19 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
     tBool = [tDefaults boolForKey:SHUserDefaultsFrameRandomPosition];
 
-    [_frameRandomPositionCheckBox setState:(tBool == YES) ? NSControlStateValueOn : NSControlStateValueOff];
+    [_frameRandomPositionCheckBox setState:tBool ? NSControlStateValueOn : NSControlStateValueOff];
 
     // Draw Border
 
     tBool = [tDefaults boolForKey:SHUserDefaultsFrameDrawBorder];
 
-    [_frameDrawBorderCheckBox setState:(tBool == YES) ? NSControlStateValueOn : NSControlStateValueOff];
+    [_frameDrawBorderCheckBox setState:tBool ? NSControlStateValueOn : NSControlStateValueOff];
 
     // Show Metadata
 
     tBool = [tDefaults boolForKey:SHUserDefaultsFrameShowMetadata];
 
-    [_frameShowMetadataCheckBox setState:(tBool == YES) ? NSControlStateValueOn : NSControlStateValueOff];
+    [_frameShowMetadataCheckBox setState:tBool ? NSControlStateValueOn : NSControlStateValueOff];
 
     [_frameShowMetadataModeMatrix setEnabled:tBool];
 
@@ -271,7 +271,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
     [_frameShowMetadataModeMatrix selectCellWithTag:tInteger];
 
-    [_frameShowMetadataPeriodSlider setEnabled:(tBool == YES && (tInteger == kMovieFrameShowMetadataPeriodically))];
+    [_frameShowMetadataPeriodSlider setEnabled:(tBool && (tInteger == kMovieFrameShowMetadataPeriodically))];
 
 
     if ([tDefaults objectForKey:SHUserDefaultsFrameShowMetadataPeriod] == nil)
@@ -300,7 +300,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
     tBool = [tDefaults boolForKey:SHUserDefaultsAudioMainDisplayOnly];
 
-    [_audioMainScreenCheckBox setState:(tBool == YES) ? NSOnState : NSOffState];
+    [_audioMainScreenCheckBox setState:tBool ? NSOnState : NSOffState];
 
     // Volume
 
@@ -329,7 +329,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
     tBool = [tDefaults boolForKey:SHUserDefaultsMainDisplayOnly];
 
-    [_mainScreenCheckBox setState:(tBool == YES) ? NSControlStateValueOn : NSControlStateValueOff];
+    [_mainScreenCheckBox setState:tBool ? NSControlStateValueOn : NSControlStateValueOff];
 
     [_assetsTableView reloadData];
 }
@@ -344,7 +344,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
         return;
 
     for (NSMutableDictionary *tAssetDictionary in _cachedAssetsArray) {
-        if ([tAssetDictionary[SHConfigurationAssetPath] isEqualToString:tPath] == YES) {
+        if ([tAssetDictionary[SHConfigurationAssetPath] isEqualToString:tPath]) {
             tAssetDictionary[SHConfigurationAssetDuration] = tDictionary[SHNotificationAssetDurationString];
 
             // Save selection
@@ -377,13 +377,13 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
             CMTime tTime = tAVAsset.duration;
             Float64 tSeconds = CMTimeGetSeconds(tTime);
 
-            unsigned int tNumberOfHours = tSeconds / (3600.0);
+            unsigned int tNumberOfHours = (unsigned int) (tSeconds / (3600.0));
             tSeconds = tSeconds - (Float64) tNumberOfHours * 3600.0;
 
-            unsigned int tNumberOfMinutes = tSeconds / 60.0;
+            unsigned int tNumberOfMinutes = (unsigned int) (tSeconds / 60.0);
             tSeconds = tSeconds - (Float64) tNumberOfMinutes * 60.0;
 
-            unsigned int tNumberOfSeconds = tSeconds;
+            unsigned int tNumberOfSeconds = (unsigned int) tSeconds;
 
             [self performSelectorOnMainThread:@selector(updateAssetDuration:)
                                    withObject:@{SHNotificationAssetPath: inPath,
@@ -403,7 +403,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
         return;
 
     for (NSMutableDictionary *tAssetDictionary in _cachedAssetsArray) {
-        if ([tAssetDictionary[SHConfigurationAssetPath] isEqualToString:tPath] == YES) {
+        if ([tAssetDictionary[SHConfigurationAssetPath] isEqualToString:tPath]) {
             tAssetDictionary[SHConfigurationAssetFolderAssetsCount] = tDictionary[SHNotificationAssetFolderAssetsCount];
 
             // Save selection
@@ -431,22 +431,22 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
     NSUInteger tCount = 0;
     BOOL isDirectory;
 
-    if ([tFileManager fileExistsAtPath:inPath isDirectory:&isDirectory] == YES && isDirectory == YES) {
+    if ([tFileManager fileExistsAtPath:inPath isDirectory:&isDirectory] && isDirectory == YES) {
         NSArray *tArray = [tFileManager contentsOfDirectoryAtPath:inPath error:NULL];
         NSArray *tUTIsArray = [AVURLAsset audiovisualTypes];
 
         for (NSString *tFileName in tArray) {
             NSString *tFilePath = [inPath stringByAppendingPathComponent:tFileName];
 
-            if ([tFileManager fileExistsAtPath:tFilePath isDirectory:&isDirectory] == YES && isDirectory == NO) {
+            if ([tFileManager fileExistsAtPath:tFilePath isDirectory:&isDirectory] && isDirectory == NO) {
                 NSString *tFileUTI;
                 NSURL *tURL = [NSURL fileURLWithPath:tFilePath];
 
-                if ([tURL getResourceValue:&tFileUTI forKey:NSURLTypeIdentifierKey error:NULL] == YES) {
-                    if ([tUTIsArray containsObject:tFileUTI] == YES) {
+                if ([tURL getResourceValue:&tFileUTI forKey:NSURLTypeIdentifierKey error:NULL]) {
+                    if ([tUTIsArray containsObject:tFileUTI]) {
                         AVURLAsset *tAVAsset = [AVURLAsset URLAssetWithURL:tURL options:nil];
 
-                        if (tAVAsset.isPlayable == YES)
+                        if (tAVAsset.isPlayable)
                             tCount++;
                     }
                 }
@@ -474,8 +474,8 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
             NSIndexSet *tIndexSet = [_assetsTableView selectedRowIndexes];
             NSFileManager *tFileManager = [NSFileManager defaultManager];
 
-            if ([tIndexSet containsIndex:tClickedRow] == NO) {
-                NSDictionary *tDictionary = _cachedAssetsArray[tClickedRow];
+            if (![tIndexSet containsIndex:(NSUInteger) tClickedRow]) {
+                NSDictionary *tDictionary = _cachedAssetsArray[(NSUInteger) tClickedRow];
 
                 NSString *tAssetPath = tDictionary[SHConfigurationAssetPath];
 
@@ -488,7 +488,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                     NSString *tAssetPath = tDictionary[SHConfigurationAssetPath];
 
                     if (tAssetPath != nil) {
-                        if ([tFileManager fileExistsAtPath:tAssetPath] == NO)
+                        if (![tFileManager fileExistsAtPath:tAssetPath])
                             tCount--;
                     }
                 }
@@ -509,8 +509,8 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
     NSIndexSet *tIndexSet = [_assetsTableView selectedRowIndexes];
 
-    if ([tIndexSet containsIndex:tClickedRow] == NO) {
-        NSDictionary *tDictionary = _cachedAssetsArray[tClickedRow];
+    if (![tIndexSet containsIndex:(NSUInteger) tClickedRow]) {
+        NSDictionary *tDictionary = _cachedAssetsArray[(NSUInteger) tClickedRow];
         NSString *tAssetPath = tDictionary[SHConfigurationAssetPath];
 
         if (tAssetPath != nil)
@@ -546,14 +546,14 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
         NSFileManager *tFileManager = [NSFileManager defaultManager];
 
         for (NSURL *tURL in tURLs) {
-            if ([tURL isFileURL] == YES) {
+            if ([tURL isFileURL]) {
                 NSString *tPath = [tURL path];
                 BOOL tFound = NO;
 
                 NSMutableDictionary *tMutableDictionary = [@{SHConfigurationAssetPath: tPath} mutableCopy];
                 BOOL isDirectory;
 
-                if ([tFileManager fileExistsAtPath:tPath isDirectory:&isDirectory] == YES)
+                if ([tFileManager fileExistsAtPath:tPath isDirectory:&isDirectory])
                     tMutableDictionary[SHConfigurationAssetFolder] = @(isDirectory);
                 else
                     tMutableDictionary[SHConfigurationAssetNotFound] = @(YES);
@@ -567,7 +567,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                     }
                 }
 
-                if (tFound == NO) {
+                if (!tFound) {
                     [_cachedAssetsArray addObject:tMutableDictionary];
 
                     [tMutableIndexSet addIndex:tCount];
@@ -640,7 +640,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
     if (sAboutBoxWindowController == nil)
         sAboutBoxWindowController = [SHAboutBoxWindowController new];
 
-    if ([sAboutBoxWindowController.window isVisible] == NO)
+    if (![sAboutBoxWindowController.window isVisible])
         [sAboutBoxWindowController.window center];
 
     [sAboutBoxWindowController.window makeKeyAndOrderFront:nil];
@@ -758,7 +758,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
     if (inTableView == _assetsTableView) {
         SHAssetTableCellView *tAssetTableView = [inTableView makeViewWithIdentifier:@"AssetView" owner:self];
 
-        NSMutableDictionary *tAssetDictionary = _cachedAssetsArray[inRow];
+        NSMutableDictionary *tAssetDictionary = _cachedAssetsArray[(NSUInteger) inRow];
 
         NSNumber *tNumber = tAssetDictionary[SHConfigurationAssetNotFound];
 
@@ -774,7 +774,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                     tAssetDictionary[SHConfigurationAssetIcon] = tIcon;
             }
 
-            if ([tAssetDictionary[SHConfigurationAssetFolder] boolValue] == YES) {
+            if ([tAssetDictionary[SHConfigurationAssetFolder] boolValue]) {
                 [tAssetTableView.textField setHidden:YES];
                 [tAssetTableView.durationLabel setHidden:YES];
                 [tAssetTableView.folderNameLabel setHidden:NO];
@@ -788,14 +788,14 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 
                 // Number of assets at first level of folder
 
-                NSNumber *tNumber = tAssetDictionary[SHConfigurationAssetFolderAssetsCount];
+                NSNumber *tNumberInner = tAssetDictionary[SHConfigurationAssetFolderAssetsCount];
 
-                if (tNumber == nil) {
+                if (tNumberInner == nil) {
                     [tAssetTableView.folderAssetsCountLabel setStringValue:@"-"];
 
                     [NSThread detachNewThreadSelector:@selector(getAssetsCountThread:) toTarget:self withObject:tAssetDictionary[SHConfigurationAssetPath]];
                 } else {
-                    [tAssetTableView.folderAssetsCountLabel setUnsignedIntegerValue:[tNumber unsignedIntegerValue]];
+                    [tAssetTableView.folderAssetsCountLabel setUnsignedIntegerValue:[tNumberInner unsignedIntegerValue]];
                 }
             } else {
                 [tAssetTableView.textField setHidden:NO];
@@ -862,20 +862,20 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
         NSPasteboard *tPasteboard = [inDraggingInfo draggingPasteboard];
         NSString *tPasteboardType = [tPasteboard availableTypeFromArray:@[SHPasteboardTypeSelectedRows, NSFilenamesPboardType]];
 
-        if ([tPasteboardType isEqualToString:SHPasteboardTypeSelectedRows] == YES) {
-            if ([_internalDragData containsOnlyOneRange] == YES) {
+        if ([tPasteboardType isEqualToString:SHPasteboardTypeSelectedRows]) {
+            if ([_internalDragData containsOnlyOneRange]) {
                 NSUInteger tFirstIndex = [_internalDragData firstIndex];
                 NSUInteger tLastIndex = [_internalDragData lastIndex];
 
                 if (inRow >= tFirstIndex && inRow <= (tLastIndex + 1))
                     return NSDragOperationNone;
             } else {
-                if ([_internalDragData containsIndex:(inRow - 1)] == YES)
+                if ([_internalDragData containsIndex:(NSUInteger) (inRow - 1)])
                     return NSDragOperationNone;
             }
 
             return NSDragOperationMove;
-        } else if ([tPasteboardType isEqualToString:NSFilenamesPboardType] == YES) {
+        } else if ([tPasteboardType isEqualToString:NSFilenamesPboardType]) {
             // Check whether the files can be accepted (same as Open panel in 2 steps)
 
             NSArray *tFilesArray = [tPasteboard propertyListForType:NSFilenamesPboardType];
@@ -898,18 +898,18 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                     }
                 }
 
-                if (tFound == NO) {
+                if (!tFound) {
                     BOOL isDirectory;
 
-                    if ([tFileManager fileExistsAtPath:tFile isDirectory:&isDirectory] == YES) {
-                        if (isDirectory == YES) {
+                    if ([tFileManager fileExistsAtPath:tFile isDirectory:&isDirectory]) {
+                        if (isDirectory) {
                             tFoundAtLeastOne = YES;
                             break;
                         } else {
                             NSString *tUTI = [tSharedWorkspace typeOfFile:tFile error:NULL];
 
                             if (tUTI != nil) {
-                                if ([tAcceptedUTIsArray containsObject:tUTI] == YES) {
+                                if ([tAcceptedUTIsArray containsObject:tUTI]) {
                                     tFoundAtLeastOne = YES;
                                     break;
                                 }
@@ -919,7 +919,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                 }
             }
 
-            if (tFoundAtLeastOne == YES)
+            if (tFoundAtLeastOne)
                 return NSDragOperationCopy;
         }
     }
@@ -934,7 +934,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
         NSPasteboard *tPasteboard = [inDraggingInfo draggingPasteboard];
         NSString *tPasteboardType = [tPasteboard availableTypeFromArray:@[SHPasteboardTypeSelectedRows, NSFilenamesPboardType]];
 
-        if ([tPasteboardType isEqualToString:SHPasteboardTypeSelectedRows] == YES) {
+        if ([tPasteboardType isEqualToString:SHPasteboardTypeSelectedRows]) {
             NSUInteger tIndex = [_internalDragData firstIndex];
 
             tNewAssets = [[[_cachedAssetsArray objectsAtIndexes:_internalDragData] mutableCopy] autorelease];
@@ -947,7 +947,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
             }
 
             [_cachedAssetsArray removeObjectsAtIndexes:_internalDragData];
-        } else if ([tPasteboardType isEqualToString:NSFilenamesPboardType] == YES) {
+        } else if ([tPasteboardType isEqualToString:NSFilenamesPboardType]) {
             NSArray *tFilesArray = [tPasteboard propertyListForType:NSFilenamesPboardType];
             NSFileManager *tFileManager = [NSFileManager defaultManager];
 
@@ -965,11 +965,11 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                     }
                 }
 
-                if (tFound == NO) {
+                if (!tFound) {
                     BOOL isDirectory;
 
-                    if ([tFileManager fileExistsAtPath:tFile isDirectory:&isDirectory] == YES) {
-                        if (isDirectory == YES) {
+                    if ([tFileManager fileExistsAtPath:tFile isDirectory:&isDirectory]) {
+                        if (isDirectory) {
                             NSMutableDictionary *tMutableDictionary = [@{SHConfigurationAssetPath: tFile} mutableCopy];
 
                             tMutableDictionary[SHConfigurationAssetFolder] = @(YES);
@@ -982,7 +982,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                             if (tFileURL != nil) {
                                 AVURLAsset *tAVAsset = [AVURLAsset URLAssetWithURL:tFileURL options:nil];
 
-                                if (tAVAsset.isPlayable == YES) {
+                                if (tAVAsset.isPlayable) {
                                     NSMutableDictionary *tMutableDictionary = [@{SHConfigurationAssetPath: tFile} mutableCopy];
 
                                     tMutableDictionary[SHConfigurationAssetFolder] = @(NO);
@@ -1022,29 +1022,24 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
 #pragma mark - NSSavePanel delegate
 
 - (BOOL)panel:(id)sender validateURL:(NSURL *)inURL error:(NSError **)outError {
-    if ([inURL isFileURL] == YES) {
+    if ([inURL isFileURL]) {
         NSFileManager *tFileManager = [NSFileManager defaultManager];
         BOOL tIsDirectory;
 
-        if ([tFileManager fileExistsAtPath:[inURL path] isDirectory:&tIsDirectory] == YES && tIsDirectory == YES)
+        if ([tFileManager fileExistsAtPath:[inURL path] isDirectory:&tIsDirectory] && tIsDirectory == YES)
             return YES;
     }
 
     AVURLAsset *tAVAsset = [AVURLAsset URLAssetWithURL:inURL options:nil];
 
-    if (tAVAsset.isPlayable == NO) {
-        // A COMPLETER
+    return tAVAsset.isPlayable;
 
-        return NO;
-    }
-
-    return YES;
 }
 
 #pragma mark - Notifications
 
 - (void)tableViewSelectionDidChange:(NSNotification *)inNotification {
-    [_deleteButton setEnabled:[_assetsTableView numberOfSelectedRows] > 0];
+    [_deleteButton setEnabled:([_assetsTableView numberOfSelectedRows] > 0)];
 }
 
 - (void)shouldShowValueLabel:(NSNotification *)inNotification {
