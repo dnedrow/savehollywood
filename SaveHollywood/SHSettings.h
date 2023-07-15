@@ -1,23 +1,21 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSUInteger, SHMovieScaling)
-{
-	SHMovieScaleProportionallyUpOrDown=0,		// Scale movie to maximum possible dimensions while (1) staying within destination area (2) preserving aspect ratio
-	SHMovieScaleAxesIndependently,				// Scale each dimension to exactly fit destination. Do not preserve aspect ratio.
-	SHMovieScaleNone,							// Do not scale.
+typedef NS_ENUM(NSUInteger, SHMovieScaling) {
+    SHMovieScaleProportionallyUpOrDown = 0,        // Scale movie to maximum possible dimensions while (1) staying within destination area (2) preserving aspect ratio
+    SHMovieScaleAxesIndependently,                // Scale each dimension to exactly fit destination. Do not preserve aspect ratio.
+    SHMovieScaleNone,                            // Do not scale.
 };
 
 enum {
-	kMovieFrameShowMetadataAtStart=0,
-	kMovieFrameShowMetadataPeriodically
+    kMovieFrameShowMetadataAtStart = 0,
+    kMovieFrameShowMetadataPeriodically
 };
 
-typedef NS_ENUM(NSUInteger, SHMovieAudioVolumeMode)
-{
-	SHMovieAudioVolumeNormal=0,
-	SHMovieAudioVolumeMute,
-	SHMovieAudioVolumeCustom
+typedef NS_ENUM(NSUInteger, SHMovieAudioVolumeMode) {
+    SHMovieAudioVolumeNormal = 0,
+    SHMovieAudioVolumeMute,
+    SHMovieAudioVolumeCustom
 };
 
 #define SHUserDefaultsFrameShowMetadataPeriodMinimumValue   15
@@ -28,7 +26,7 @@ typedef NS_ENUM(NSUInteger, SHMovieAudioVolumeMode)
 @property BOOL randomOrder;
 @property BOOL startWhereLeftOff;
 
-@property (retain) NSMutableArray * assets;
+@property(retain) NSMutableArray *assets;
 
 @property SHMovieScaling scaling;
 @property BOOL randomPosition;
@@ -38,7 +36,7 @@ typedef NS_ENUM(NSUInteger, SHMovieAudioVolumeMode)
 @property NSInteger showMetadataMode;
 @property NSInteger showMetadataPeriod;
 
-@property (copy) NSColor * backgroundColor;
+@property(copy) NSColor *backgroundColor;
 
 @property BOOL audioMainScreenOnly;
 @property SHMovieAudioVolumeMode audioMode;
@@ -55,7 +53,6 @@ typedef NS_ENUM(NSUInteger, SHMovieAudioVolumeMode)
 - (NSDictionary *)dictionaryRepresentation;
 
 - (void)resetSettings;
-
 
 
 @end
