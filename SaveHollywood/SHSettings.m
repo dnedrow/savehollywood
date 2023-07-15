@@ -138,7 +138,7 @@ static BOOL sSettingsAreLocked = NO;
         tMutableDictionary[SHUserDefaultsMainDisplayOnly] = @(self.mainDisplayOnly);
     }
 
-    return [tMutableDictionary copy];
+    return [[tMutableDictionary copy] autorelease];
 }
 
 - (void)resetSettings {

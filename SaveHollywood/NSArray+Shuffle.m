@@ -1,7 +1,5 @@
 #import "NSArray+Shuffle.h"
 
-#include <stdlib.h>
-
 @implementation NSArray (Shuffle)
 
 - (NSArray *)shuffledArray {

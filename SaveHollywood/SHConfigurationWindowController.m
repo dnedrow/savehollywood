@@ -234,6 +234,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
         }
 
         [_cachedAssetsArray addObject:tMutableDictionary];
+        [tMutableDictionary release];
     }
 
     // Frame
@@ -572,6 +573,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                     [tMutableIndexSet addIndex:tCount];
                     tCount++;
                 }
+                [tMutableDictionary release];
             }
         }
 
@@ -973,6 +975,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                             tMutableDictionary[SHConfigurationAssetFolder] = @(YES);
 
                             [tNewAssets addObject:tMutableDictionary];
+                            [tMutableDictionary release];
                         } else {
                             NSURL *tFileURL = [NSURL fileURLWithPath:tFile];
 
@@ -985,6 +988,7 @@ NSString *const SHPasteboardTypeSelectedRows = @"savehollywood.pasterboardType.s
                                     tMutableDictionary[SHConfigurationAssetFolder] = @(NO);
 
                                     [tNewAssets addObject:tMutableDictionary];
+                                    [tMutableDictionary release];
                                 }
                             }
                         }
