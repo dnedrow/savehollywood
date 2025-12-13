@@ -72,7 +72,8 @@
         return;
 
     dispatch_async(_syncQueue, ^{
-        [_playingAssetsSet addObject:inAsset];
+        (void)self;
+        [self->_playingAssetsSet addObject:inAsset];
     });
 }
 
@@ -82,7 +83,8 @@
         return;
 
     dispatch_async(_syncQueue, ^{
-        [_playingAssetsSet removeObject:inAsset];
+        (void)self;
+        [self->_playingAssetsSet removeObject:inAsset];
     });
 }
 

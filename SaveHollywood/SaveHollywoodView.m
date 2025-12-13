@@ -744,6 +744,7 @@ NSUInteger random_no(NSUInteger n)
     CGRect tFrame=tBackgroundFrame;
     
     [tAsset loadTracksWithMediaType:AVMediaTypeVideo completionHandler:^(NSArray<AVAssetTrack *> * _Nullable tracks, NSError * _Nullable error) {
+        (void)self;
         if (error != nil || tracks.count == 0) {
             NSLog(@"Failed to load video tracks: %@", error);
             return;
@@ -766,12 +767,12 @@ NSUInteger random_no(NSUInteger n)
 
         CGRect tFrame;
 
-        if (_randomPosition == YES && tRatio < 1.0) {
+        if (self->_randomPosition == YES && tRatio < 1.0) {
             NSSize tSize = tAssetSize;
             tFrame.origin = SSRandomPointForSizeWithinRect(tAssetSize, tBackgroundFrame);
             tFrame.size = tSize;
         } else {
-            if (_drawBorder == YES) {
+            if (self->_drawBorder == YES) {
                 if (tAssetSize.width > (tBackgroundFrame.size.width - 2 * BORDER_SIZE)) {
                     tAssetSize.width = tBackgroundFrame.size.width - 2 * BORDER_SIZE;
                 }
@@ -784,19 +785,20 @@ NSUInteger random_no(NSUInteger n)
             tFrame.origin.y = round(tBackgroundFrame.origin.y + (tBackgroundFrame.size.height - tAssetSize.height) * 0.5);
         }
 
-        if (_scaling == SHMovieScaleAxesIndependently) {
-            _AVPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        if (self->_scaling == SHMovieScaleAxesIndependently) {
+            self->_AVPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         } else {
-            _AVPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
+            self->_AVPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
         }
 
-        if (_drawBorder == YES) {
+        if (self->_drawBorder == YES) {
             tFrame = CGRectInset(tBackgroundFrame, BORDER_SIZE, BORDER_SIZE);
         }
 
         // Use tFrame and update layers/UI on main thread as needed:
         dispatch_async(dispatch_get_main_queue(), ^{
-            _AVPlayerLayer.frame = tFrame;
+            (void)self;
+            self->_AVPlayerLayer.frame = tFrame;
             // Update UI or redraw if necessary
         });
     }];
@@ -918,7 +920,7 @@ NSUInteger random_no(NSUInteger n)
         }
         
         [tAVPlayerItem.asset loadValuesAsynchronouslyForKeys:[NSArray arrayWithObject:@"availableMetadataFormats"] completionHandler:^(){
-         
+             (void)self;
              if ([tAVPlayerItem.asset statusOfValueForKey:@"availableMetadataFormats" error:NULL]==AVKeyValueStatusLoaded)
              {
                  NSArray * tAvailableMetadataFormats=[tAVPlayerItem.asset availableMetadataFormats];
@@ -926,40 +928,41 @@ NSUInteger random_no(NSUInteger n)
                  if ([tAvailableMetadataFormats containsObject:AVMetadataFormatQuickTimeUserData]==YES)
                  {
                      [tAVPlayerItem.asset loadMetadataForFormat:AVMetadataFormatQuickTimeUserData completionHandler:^(NSArray<AVMetadataItem *> * _Nullable metadata, NSError * _Nullable error) {
-                         
+                         (void)self;
                          if (error) {
                              NSLog(@"Error loading metadata: %@", error);
                              return;
                          }
-                         
+
                          NSArray *tMetadataItemsArray;
 
                          // Title
-                         if (_currentAssetMetadataTitle == nil) {
+                         if (self->_currentAssetMetadataTitle == nil) {
                              tMetadataItemsArray = [AVMetadataItem metadataItemsFromArray:metadata
                                                                                    withKey:AVMetadataCommonKeyTitle
                                                                                   keySpace:AVMetadataKeySpaceCommon];
                              if ([tMetadataItemsArray count] > 0) {
-                                 _currentAssetMetadataTitle = [[NSString alloc] initWithString:[tMetadataItemsArray[0] stringValue]];
+                                 self->_currentAssetMetadataTitle = [[NSString alloc] initWithString:[tMetadataItemsArray[0] stringValue]];
                              }
                          }
 
                          // Copyright
-                         if (_currentAssetMetadataCopyrights == nil) {
+                         if (self->_currentAssetMetadataCopyrights == nil) {
                              tMetadataItemsArray = [AVMetadataItem metadataItemsFromArray:metadata
                                                                                    withKey:AVMetadataCommonKeyCopyrights
                                                                                   keySpace:AVMetadataKeySpaceCommon];
                              if ([tMetadataItemsArray count] > 0) {
-                                 _currentAssetMetadataCopyrights = [[NSString alloc] initWithString:[tMetadataItemsArray[0] stringValue]];
+                                 self->_currentAssetMetadataCopyrights = [[NSString alloc] initWithString:[tMetadataItemsArray[0] stringValue]];
                              }
                          }
 
-                         if (_currentAssetMetadataTitle != nil || _currentAssetMetadataCopyrights != nil) {
+                         if (self->_currentAssetMetadataTitle != nil || self->_currentAssetMetadataCopyrights != nil) {
                              dispatch_async(dispatch_get_main_queue(), ^{
-                                 tTitleLayer.string = _currentAssetMetadataTitle;
-                                 tCopyrightLayer.string = _currentAssetMetadataCopyrights;
+                                 (void)self;
+                                 tTitleLayer.string = self->_currentAssetMetadataTitle;
+                                 tCopyrightLayer.string = self->_currentAssetMetadataCopyrights;
 
-                                 if (_metadadataMode == kMovieFrameShowMetadataAtStart) {
+                                 if (self->_metadadataMode == kMovieFrameShowMetadataAtStart) {
                                      [self showMetadata:nil];
                                  }
                              });
