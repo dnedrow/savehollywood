@@ -22,14 +22,14 @@
 
 CGFloat heightForStringDrawing(NSAttributedString *myString, CGFloat myWidth)
 {
-    NSTextStorage *textStorage = [[[NSTextStorage alloc] initWithAttributedString:myString] autorelease];
-    NSTextContainer *textContainer = [[[NSTextContainer alloc] initWithContainerSize: NSMakeSize(myWidth, FLT_MAX)] autorelease];
-    NSLayoutManager *layoutManager = [[[NSLayoutManager alloc] init] autorelease];
+    NSTextStorage *textStorage = [[NSTextStorage alloc] initWithAttributedString:myString];
+    NSTextContainer *textContainer = [[NSTextContainer alloc] initWithContainerSize: NSMakeSize(myWidth, FLT_MAX)];
+    NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
 
     [layoutManager addTextContainer:textContainer];
     [textStorage addLayoutManager:layoutManager];
     [textContainer setLineFragmentPadding:0.0];
-    
+
     (void) [layoutManager glyphRangeForTextContainer:textContainer];
     return [layoutManager usedRectForTextContainer:textContainer].size.height;
 }
@@ -44,35 +44,22 @@ CGFloat heightForStringDrawing(NSAttributedString *myString, CGFloat myWidth)
     {
         NSMutableParagraphStyle * tMutableParagraphStyle=[[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         tMutableParagraphStyle.alignment=NSTextAlignmentCenter;
-        
+
 		NSShadow * tShadow=[NSShadow new];
 		tShadow.shadowOffset=NSMakeSize(0,-1);
 		tShadow.shadowColor=[NSColor colorWithDeviceWhite:0.65 alpha:1.0];
-        
+
 		_attributesDictionary=[@{NSForegroundColorAttributeName:[NSColor whiteColor],
                                  NSFontAttributeName:[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSControlSizeRegular]],
 								NSParagraphStyleAttributeName:tMutableParagraphStyle,
 								 NSShadowAttributeName:tShadow} copy];
-								
-		
-        [tMutableParagraphStyle release];
-        [tShadow release];
     }
     
     return self;
 }
 
-- (void)dealloc
-{
-    [_attributesDictionary release];
-    
-    [super dealloc];
-}
-
 - (void)setStringValue:(NSString *)inValue
 {
-    [_cachedStringValue release];
-    
     _cachedStringValue=[[NSAttributedString alloc] initWithString:inValue
                                                        attributes:_attributesDictionary];
 }

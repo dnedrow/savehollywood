@@ -6,10 +6,10 @@
 
 - (NSArray *)shuffledArray
 {
-    NSMutableArray * tMutableArray=[[self mutableCopy] autorelease];
-    
+    NSMutableArray * tMutableArray=[self mutableCopy];
+
     [tMutableArray shuffle];
-    
+
     return tMutableArray;
 }
 

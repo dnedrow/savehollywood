@@ -161,7 +161,6 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         {
             [tImage setTemplate:YES];
 			[_volumeMuteButton setImage:tImage];
-            [tImage release];
         }
     }
     
@@ -175,7 +174,6 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         {
 			[tImage setTemplate:YES];
             [_volumeFullButton setImage:tImage];
-            [tImage release];
         }
     }
     
@@ -382,36 +380,34 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 {
     if (inPath==nil)
 		return;
-	
-	NSAutoreleasePool * tPool=[NSAutoreleasePool new];
 
-	NSURL * tURL=[NSURL fileURLWithPath:inPath];
-	
-	if (tURL!=nil)
-	{
-		AVURLAsset *tAVAsset=[AVURLAsset URLAssetWithURL:tURL options:nil];
-		
-		if (tAVAsset!=nil)
+	@autoreleasepool {
+		NSURL * tURL=[NSURL fileURLWithPath:inPath];
+
+		if (tURL!=nil)
 		{
-			CMTime tTime=tAVAsset.duration;
-			Float64 tSeconds=CMTimeGetSeconds(tTime);
-			
-			unsigned int tNumberOfHours=tSeconds/(3600.0);
-			tSeconds=tSeconds-(Float64)tNumberOfHours*3600.0;
-			
-			unsigned int tNumberOfMinutes=tSeconds/60.0;
-			tSeconds=tSeconds-(Float64)tNumberOfMinutes*60.0;
-			
-			unsigned int tNumberOfSeconds=tSeconds;
-			
-			[self performSelectorOnMainThread:@selector(updateAssetDuration:)
-								   withObject:@{SHNotificationAssetPath:inPath,
-												SHNotificationAssetDurationString:[NSString stringWithFormat:@"%02u:%02u:%02u",tNumberOfHours,tNumberOfMinutes,tNumberOfSeconds]}
-									waitUntilDone:NO];
+			AVURLAsset *tAVAsset=[AVURLAsset URLAssetWithURL:tURL options:nil];
+
+			if (tAVAsset!=nil)
+			{
+				CMTime tTime=tAVAsset.duration;
+				Float64 tSeconds=CMTimeGetSeconds(tTime);
+
+				unsigned int tNumberOfHours=tSeconds/(3600.0);
+				tSeconds=tSeconds-(Float64)tNumberOfHours*3600.0;
+
+				unsigned int tNumberOfMinutes=tSeconds/60.0;
+				tSeconds=tSeconds-(Float64)tNumberOfMinutes*60.0;
+
+				unsigned int tNumberOfSeconds=tSeconds;
+
+				[self performSelectorOnMainThread:@selector(updateAssetDuration:)
+									   withObject:@{SHNotificationAssetPath:inPath,
+													SHNotificationAssetDurationString:[NSString stringWithFormat:@"%02u:%02u:%02u",tNumberOfHours,tNumberOfMinutes,tNumberOfSeconds]}
+										waitUntilDone:NO];
+			}
 		}
 	}
-	
-	[tPool drain];
 }
 
 - (void)updateAssetsCount:(id)inObject
@@ -448,46 +444,44 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     if (inPath==nil)
 		return;
 
-	NSAutoreleasePool * tPool=[NSAutoreleasePool new];
-	
-	NSFileManager * tFileManager=[NSFileManager defaultManager];
-	NSUInteger tCount=0;
-	BOOL isDirectory;
-	
-	if ([tFileManager fileExistsAtPath:inPath isDirectory:&isDirectory]==YES && isDirectory==YES)
-	{
-		NSArray * tArray=[tFileManager contentsOfDirectoryAtPath:inPath error:NULL];
-		NSArray * tUTIsArray=[AVURLAsset audiovisualTypes];
-		
-		for(NSString * tFileName in tArray)
+	@autoreleasepool {
+		NSFileManager * tFileManager=[NSFileManager defaultManager];
+		NSUInteger tCount=0;
+		BOOL isDirectory;
+
+		if ([tFileManager fileExistsAtPath:inPath isDirectory:&isDirectory]==YES && isDirectory==YES)
 		{
-			NSString * tFilePath=[inPath stringByAppendingPathComponent:tFileName];
-			
-			if ([tFileManager fileExistsAtPath:tFilePath isDirectory:&isDirectory]==YES && isDirectory==NO)
+			NSArray * tArray=[tFileManager contentsOfDirectoryAtPath:inPath error:NULL];
+			NSArray * tUTIsArray=[AVURLAsset audiovisualTypes];
+
+			for(NSString * tFileName in tArray)
 			{
-				NSString * tFileUTI;
-				NSURL * tURL=[NSURL fileURLWithPath:tFilePath];
-				
-				if ([tURL getResourceValue:&tFileUTI forKey:NSURLTypeIdentifierKey error:NULL]==YES)
+				NSString * tFilePath=[inPath stringByAppendingPathComponent:tFileName];
+
+				if ([tFileManager fileExistsAtPath:tFilePath isDirectory:&isDirectory]==YES && isDirectory==NO)
 				{
-					if ([tUTIsArray containsObject:tFileUTI]==YES)
+					NSString * tFileUTI;
+					NSURL * tURL=[NSURL fileURLWithPath:tFilePath];
+
+					if ([tURL getResourceValue:&tFileUTI forKey:NSURLTypeIdentifierKey error:NULL]==YES)
 					{
-						AVURLAsset *tAVAsset=[AVURLAsset URLAssetWithURL:tURL options:nil];
-						
-						if (tAVAsset.isPlayable==YES)
-							tCount++;
+						if ([tUTIsArray containsObject:tFileUTI]==YES)
+						{
+							AVURLAsset *tAVAsset=[AVURLAsset URLAssetWithURL:tURL options:nil];
+
+							if (tAVAsset.isPlayable==YES)
+								tCount++;
+						}
 					}
 				}
 			}
 		}
+
+		[self performSelectorOnMainThread:@selector(updateAssetsCount:)
+							   withObject:@{SHNotificationAssetPath:inPath,
+											SHNotificationAssetFolderAssetsCount:@(tCount)}
+							waitUntilDone:NO];
 	}
-	
-	[self performSelectorOnMainThread:@selector(updateAssetsCount:)
-						   withObject:@{SHNotificationAssetPath:inPath,
-										SHNotificationAssetFolderAssetsCount:@(tCount)}
-						waitUntilDone:NO];
-	
-	[tPool drain];
 }
 
 #pragma mark -
@@ -924,12 +918,11 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         if ([inIndexSet count]>0)
         {
             [inPasteboard declareTypes:[NSArray arrayWithObject:SHPasteboardTypeSelectedRows] owner:nil];
-            
-            [_internalDragData release];
-            _internalDragData=[inIndexSet retain];
-            
+
+            _internalDragData=inIndexSet;
+
             [inPasteboard setData:[NSData data] forType:SHPasteboardTypeSelectedRows];
-        
+
             return YES;
         }
     }
@@ -1036,9 +1029,9 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
         if ([tPasteboardType isEqualToString:SHPasteboardTypeSelectedRows]==YES)
         {
             NSUInteger tIndex=[_internalDragData firstIndex];
-            
-            tNewAssets=[[[_cachedAssetsArray objectsAtIndexes:_internalDragData] mutableCopy] autorelease];
-            
+
+            tNewAssets=[[_cachedAssetsArray objectsAtIndexes:_internalDragData] mutableCopy];
+
             while (tIndex!=NSNotFound)
             {
                 if (tIndex<inRow)

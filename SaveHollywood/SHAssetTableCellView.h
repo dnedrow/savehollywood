@@ -17,9 +17,9 @@
 
 @interface SHAssetTableCellView : NSTableCellView
 
-@property(assign) IBOutlet SHTokenView *folderAssetsCountLabel;
-@property(assign) IBOutlet NSTextField *folderNameLabel;
-@property(assign) IBOutlet NSTextField *durationLabel;
+@property(weak) IBOutlet SHTokenView *folderAssetsCountLabel;
+@property(weak) IBOutlet NSTextField *folderNameLabel;
+@property(weak) IBOutlet NSTextField *durationLabel;
 
 
 @end

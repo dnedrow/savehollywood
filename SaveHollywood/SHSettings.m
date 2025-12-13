@@ -58,7 +58,7 @@ static BOOL sSettingsAreLocked=NO;
 		sSettingsAreLocked=YES;
 	}
 	
-	return [[[SHSettings alloc] initWithDictionaryRepresentation:tRepresentation] autorelease];
+	return [[SHSettings alloc] initWithDictionaryRepresentation:tRepresentation];
 }
 
 + (BOOL)isConfigurationLocked
@@ -128,8 +128,8 @@ static BOOL sSettingsAreLocked=NO;
 	{
 		tMutableDictionary[SHUserDefaultsAssetsRandomOrder]=@(self.randomOrder);
 		tMutableDictionary[SHUserDefaultsAssetsStartWhereLeftOff]=@(self.startWhereLeftOff);
-		
-		tMutableDictionary[SHUserDefaultsAssetsLibrary]=[[self.assets copy] autorelease];
+
+		tMutableDictionary[SHUserDefaultsAssetsLibrary]=[self.assets copy];
 		
 		tMutableDictionary[SHUserDefaultsFrameScaling]=@(self.scaling);
 		tMutableDictionary[SHUserDefaultsFrameRandomPosition]=@(self.randomPosition);

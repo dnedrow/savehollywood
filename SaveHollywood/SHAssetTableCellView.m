@@ -13,19 +13,6 @@
 
 #import "SHAssetTableCellView.h"
 
-@interface SHAssetTableCellView()
-{
-    SHTokenView *_folderAssetsCountLabel;
-    NSTextField *_folderNameLabel;
-    NSTextField *_durationLabel;
-}
-
-@end
-
 @implementation SHAssetTableCellView
-
-@synthesize folderAssetsCountLabel=_folderAssetsCountLabel;
-@synthesize folderNameLabel=_folderNameLabel;
-@synthesize durationLabel=_durationLabel;
 
 @end

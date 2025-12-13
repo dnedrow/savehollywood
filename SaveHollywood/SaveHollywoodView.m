@@ -32,7 +32,6 @@
 
 #define METADATA_DISPLAY_DURATION 5.0
 
-NSString * const SHScreenKey=@"screen#";
 NSString * const SHScreenKeyKeyed=@"screen.keyed#";
 NSString * const SHAssetTimeKey=@"asset.time";
 NSString * const SHAssetURLKey=@"asset.url";
@@ -71,11 +70,7 @@ NSUInteger random_no(NSUInteger n)
     BOOL _audioMainScreen;
     SHMovieAudioVolumeMode _volumeMode;
     float _volumeLevel;
-    
-	// Workaround for Apple bug in Sierra
-	
-	BOOL _useKeyedArchiverForLeftOffData;
-	
+
 	// Layers
     
     CALayer * _backgroundLayer;
@@ -152,12 +147,6 @@ NSUInteger random_no(NSUInteger n)
     self = [super initWithFrame:frameRect isPreview:isPreview];
 
     if (self != nil) {
-        NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
-        NSInteger major = version.majorVersion;
-        NSInteger minor = version.minorVersion;
-
-        _useKeyedArchiverForLeftOffData = (major > 10 || (major == 10 && minor >= 12));
-
         [self setAnimationTimeInterval:1.0];
 
         _fileManager = [NSFileManager defaultManager];
@@ -293,12 +282,10 @@ NSUInteger random_no(NSUInteger n)
         if (_backgroundLayer==nil)
         {
             _backgroundLayer=[[CALayer alloc] init];
-        
+
             _backgroundLayer.frame=self.layer.bounds;
-        
+
             [self.layer addSublayer:_backgroundLayer];
-        
-            [_backgroundLayer release];
         }
         
         if (_backgroundLayer!=nil)
@@ -450,13 +437,8 @@ NSUInteger random_no(NSUInteger n)
                         
                             if (tScreenIndex!=NSNotFound)
                             {
-								NSString * tScreenKey;
-								
-								if (_useKeyedArchiverForLeftOffData==YES)
-									tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKeyKeyed,(unsigned long)tScreenIndex];
-								else
-									tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
-								
+								NSString * tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKeyKeyed,(unsigned long)tScreenIndex];
+
 								if (tSettings.startWhereLeftOff==YES)
                                 {
                                     NSData * tData=[tDefaults objectForKey:tScreenKey];
@@ -495,8 +477,8 @@ NSUInteger random_no(NSUInteger n)
             CGRect tFrame;
             
             CATextLayer * tWarningTextLayer=[CATextLayer layer];
-            
-            tWarningTextLayer.font=@"Lucida Grande Bold";
+
+            tWarningTextLayer.font=(__bridge CFTypeRef)@"Lucida Grande Bold";
             tWarningTextLayer.alignmentMode=kCAAlignmentCenter;
             tWarningTextLayer.foregroundColor=CGColorGetConstantColor(kCGColorWhite);
             
@@ -559,13 +541,8 @@ NSUInteger random_no(NSUInteger n)
         
         if (tScreenIndex!=NSNotFound)
         {
-			NSString * tScreenKey;
-			
-			if (_useKeyedArchiverForLeftOffData==YES)
-				tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKeyKeyed,(unsigned long)tScreenIndex];
-			else
-				tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKey,(unsigned long)tScreenIndex];
-            
+			NSString * tScreenKey=[NSString stringWithFormat:@"%@%lu",SHScreenKeyKeyed,(unsigned long)tScreenIndex];
+
             if (tSettings.startWhereLeftOff==YES)
             {
                 NSURL * tCurrentURL=[((AVURLAsset *) _AVPlayerLayer.player.currentItem.asset) URL];
@@ -577,26 +554,13 @@ NSUInteger random_no(NSUInteger n)
             
 					NSDictionary * tLastAssetDictionary=@{SHAssetTimeKey:tValue,
 														  SHAssetURLKey:tCurrentURL};
-					
-                    NSError *error = nil;
-                    NSData *tData = nil;
 
-                    if (_useKeyedArchiverForLeftOffData == YES) {
-                        tData = [NSKeyedArchiver archivedDataWithRootObject:tLastAssetDictionary
+                    NSError *error = nil;
+                    NSData *tData = [NSKeyedArchiver archivedDataWithRootObject:tLastAssetDictionary
                                                         requiringSecureCoding:NO
                                                                         error:&error];
-                        if (error) {
-                            NSLog(@"Archiving error: %@", error);
-                        }
-                    } else {
-                        // NSArchiver is deprecated, consider migrating all data to use NSKeyedArchiver
-                        NSError *error = nil;
-                        tData = [NSKeyedArchiver archivedDataWithRootObject:tLastAssetDictionary
-                                                        requiringSecureCoding:NO
-                                                                        error:&error];
-                        if (error != nil) {
-                            NSLog(@"Error archiving data: %@", error);
-                        }
+                    if (error != nil) {
+                        NSLog(@"Error archiving data: %@", error);
                     }
 
                     if (tData != nil) {
@@ -614,31 +578,27 @@ NSUInteger random_no(NSUInteger n)
         }
     }
     
-    [_currentAssetMetadataTitle release];
     _currentAssetMetadataTitle=nil;
-    
-    [_currentAssetMetadataCopyrights release];
+
     _currentAssetMetadataCopyrights=nil;
     
     [_AVPlayerLayer.player pause];
     
     [[SHPlayingAssetsRegister sharedRegister] removeAsset:((AVURLAsset *)_AVPlayerLayer.player.currentItem.asset).URL];
-    
+
     if (_timer!=nil)
     {
         [_timer invalidate];
-        
-        [_timer release];
+
         _timer=nil;
     }
-    
+
     _AVPlayerLayer=nil;
     [_backgroundLayer removeFromSuperlayer];
-    
+
     _metadataLayer=nil;
     _backgroundLayer=nil;
-    
-    [__assetsArray release];
+
     __assetsArray=nil;
     
     __arrayIndex=0;
@@ -659,13 +619,11 @@ NSUInteger random_no(NSUInteger n)
     NSURL * tPreferredNextURL=preferredNextAssetDictionary[SHAssetURLKey];
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideMetadata:) object:nil];
-    
+
     if (_timer!=nil)
     {
         [_timer invalidate];
-        
-        [_timer release];
-        
+
         _timer=nil;
     }
     
@@ -765,25 +723,21 @@ NSUInteger random_no(NSUInteger n)
     }
     
     AVPlayerItem * tAVPlayerItem=[[AVPlayerItem alloc] initWithAsset:tAsset];
-            
+
     if (tAVPlayerItem==nil)
     {
         __arrayIndex++;
-        
+
         return [self playNextAsset:nil canPlaySameRandomMovieTwice:NO];
     }
 
     AVPlayer * tAVPlayer=[[AVPlayer alloc] initWithPlayerItem:tAVPlayerItem];
-    
-    [tAVPlayerItem release];
-    
-    
+
+
     [_AVPlayerLayer removeFromSuperlayer];
     _AVPlayerLayer=nil;
-    
+
     _AVPlayerLayer=[AVPlayerLayer playerLayerWithPlayer:tAVPlayer];
-    
-    [tAVPlayer release];
     
     if (_AVPlayerLayer==nil)
     {
@@ -942,17 +896,17 @@ NSUInteger random_no(NSUInteger n)
             _metadataLayer.opacity=0.0f;
             
             tTitleLayer=[CATextLayer layer];
-            
-            tTitleLayer.font=@"Lucida Grande Bold";
+
+            tTitleLayer.font=(__bridge CFTypeRef)@"Lucida Grande Bold";
             tTitleLayer.fontSize=35;
             tTitleLayer.foregroundColor=CGColorGetConstantColor(kCGColorWhite);
             tTitleLayer.frame=CGRectMake(12, 25, tRect.size.width-12,40);
-            
+
             [_metadataLayer addSublayer:tTitleLayer];
-            
+
             tCopyrightLayer=[CATextLayer layer];
-            
-            tCopyrightLayer.font=@"Lucida Grande";
+
+            tCopyrightLayer.font=(__bridge CFTypeRef)@"Lucida Grande";
             tCopyrightLayer.fontSize=15;
             tCopyrightLayer.foregroundColor=CGColorGetConstantColor(kCGColorWhite);
             
@@ -968,7 +922,7 @@ NSUInteger random_no(NSUInteger n)
         
         if (_metadadataMode==kMovieFrameShowMetadataPeriodically)
         {
-            _timer=[[NSTimer scheduledTimerWithTimeInterval:_metadadataPeriod target:self selector:@selector(showMetadata:) userInfo:nil repeats:YES] retain];
+            _timer=[NSTimer scheduledTimerWithTimeInterval:_metadadataPeriod target:self selector:@selector(showMetadata:) userInfo:nil repeats:YES];
         }
         
         [tAVPlayerItem.asset loadValuesAsynchronouslyForKeys:[NSArray arrayWithObject:@"availableMetadataFormats"] completionHandler:^(){
@@ -1079,8 +1033,7 @@ NSUInteger random_no(NSUInteger n)
         if (_timer!=nil)
         {
             [_timer invalidate];
-            
-            [_timer release];
+
             _timer=nil;
         }
         
@@ -1101,7 +1054,7 @@ NSUInteger random_no(NSUInteger n)
                 {
                     if (_metadadataMode==kMovieFrameShowMetadataPeriodically)
                     {
-                        _timer=[[NSTimer scheduledTimerWithTimeInterval:_metadadataPeriod target:self selector:@selector(showMetadata:) userInfo:nil repeats:YES] retain];
+                        _timer=[NSTimer scheduledTimerWithTimeInterval:_metadadataPeriod target:self selector:@selector(showMetadata:) userInfo:nil repeats:YES];
                     }
                     else
                     {
@@ -1114,11 +1067,9 @@ NSUInteger random_no(NSUInteger n)
         }
         
         [self hideMetadata:nil];
-        
-        [_currentAssetMetadataTitle release];
+
         _currentAssetMetadataTitle=nil;
-        
-        [_currentAssetMetadataCopyrights release];
+
         _currentAssetMetadataCopyrights=nil;
         
         __arrayIndex++;
