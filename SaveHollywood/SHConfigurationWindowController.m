@@ -42,7 +42,7 @@ NSString * const SHNotificationAssetFolderAssetsCount=@"Count";
 
 NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.selectedRows";
 
-@interface SHConfigurationWindowController ()
+@interface SHConfigurationWindowController () <NSMenuItemValidation>
 {
     // UI
     
@@ -460,10 +460,10 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 
 				if ([tFileManager fileExistsAtPath:tFilePath isDirectory:&isDirectory]==YES && isDirectory==NO)
 				{
-					NSString * tFileUTI;
+					UTType * tFileUTI = nil;
 					NSURL * tURL=[NSURL fileURLWithPath:tFilePath];
 
-					if ([tURL getResourceValue:&tFileUTI forKey:NSURLTypeIdentifierKey error:NULL]==YES)
+					if ([tURL getResourceValue:&tFileUTI forKey:NSURLContentTypeKey error:NULL]==YES)
 					{
 						if ([tUTIsArray containsObject:tFileUTI]==YES)
 						{
@@ -915,23 +915,43 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     return nil;
 }
 
-- (BOOL)tableView:(NSTableView *)inTableView writeRowsWithIndexes:(NSIndexSet *)inIndexSet toPasteboard:(NSPasteboard *)inPasteboard
+- (id<NSPasteboardWriting>)tableView:(NSTableView *)tableView pasteboardWriterForRow:(NSInteger)row
 {
-    if (inTableView==_assetsTableView)
-    {
-        if ([inIndexSet count]>0)
-        {
-            [inPasteboard declareTypes:[NSArray arrayWithObject:SHPasteboardTypeSelectedRows] owner:nil];
+    if (tableView != _assetsTableView) {
+        return nil;
+    }
 
-            _internalDragData=inIndexSet;
-
-            [inPasteboard setData:[NSData data] forType:SHPasteboardTypeSelectedRows];
-
-            return YES;
+    // Establish drag selection once per drag session using current selection
+    // This mirrors previous behavior that encoded selected rows for internal reordering
+    if (_internalDragData == nil || [_internalDragData count] == 0) {
+        _internalDragData = [tableView selectedRowIndexes];
+        if (_internalDragData == nil || [_internalDragData count] == 0) {
+            // If nothing is selected, fall back to just the row being dragged
+            _internalDragData = [NSIndexSet indexSetWithIndex:(NSUInteger)row];
         }
     }
-    
-    return NO;
+
+    // Provide a pasteboard writer; we use NSPasteboardItem to advertise our custom type
+    NSPasteboardItem *item = [[NSPasteboardItem alloc] init];
+
+    // For internal drags, we add a marker data for our custom type so validateDrop/acceptDrop continue to work
+    // The data content is not used; presence of the type is enough
+    [item setData:[NSData data] forType:SHPasteboardTypeSelectedRows];
+
+    // Also provide a file URL type when the row represents a file path, so external drops still function if needed
+    // (Not strictly necessary for internal reordering, but harmless.)
+    if (row >= 0 && row < (NSInteger)[_cachedAssetsArray count]) {
+        NSDictionary *entry = _cachedAssetsArray[row];
+        NSString *path = entry[SHConfigurationAssetPath];
+        if (path.length > 0) {
+            NSURL *url = [NSURL fileURLWithPath:path];
+            if (url) {
+                [item setString:url.absoluteString forType:NSPasteboardTypeFileURL];
+            }
+        }
+    }
+
+    return item;
 }
 
 - (NSDragOperation)tableView:(NSTableView *)inTableView validateDrop:(id <NSDraggingInfo>)inDraggingInfo proposedRow:(NSInteger)inRow proposedDropOperation:(NSTableViewDropOperation)inDropOperation
@@ -999,8 +1019,8 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
                         }
                         else
                         {
+                            UTType *tUTI = nil;
                             NSURL *fileURL = [NSURL fileURLWithPath:tFile];
-                            NSString *tUTI = nil;
                             BOOL success = [fileURL getResourceValue:&tUTI forKey:NSURLContentTypeKey error:nil];
                             if (success && tUTI != nil) {
                                 if ([tAcceptedUTIsArray containsObject:tUTI]) {
@@ -1173,3 +1193,4 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 }
 
 @end
+
