@@ -401,10 +401,10 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 
 				unsigned int tNumberOfSeconds=tSeconds;
 
-				[self performSelectorOnMainThread:@selector(updateAssetDuration:)
-									   withObject:@{SHNotificationAssetPath:inPath,
-													SHNotificationAssetDurationString:[NSString stringWithFormat:@"%02u:%02u:%02u",tNumberOfHours,tNumberOfMinutes,tNumberOfSeconds]}
-										waitUntilDone:NO];
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[self updateAssetDuration:@{SHNotificationAssetPath:inPath,
+												 SHNotificationAssetDurationString:[NSString stringWithFormat:@"%02u:%02u:%02u",tNumberOfHours,tNumberOfMinutes,tNumberOfSeconds]}];
+				});
 			}
 		}
 	}
@@ -477,10 +477,10 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
 			}
 		}
 
-		[self performSelectorOnMainThread:@selector(updateAssetsCount:)
-							   withObject:@{SHNotificationAssetPath:inPath,
-											SHNotificationAssetFolderAssetsCount:@(tCount)}
-							waitUntilDone:NO];
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self updateAssetsCount:@{SHNotificationAssetPath:inPath,
+									   SHNotificationAssetFolderAssetsCount:@(tCount)}];
+		});
 	}
 }
 
@@ -854,8 +854,10 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
                 if (tNumber==nil)
                 {
                     [tAssetTableView.folderAssetsCountLabel setStringValue:@"-"];
-                    
-                    [NSThread detachNewThreadSelector:@selector(getAssetsCountThread:) toTarget:self withObject:tAssetDictionary[SHConfigurationAssetPath]];
+
+                    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+                        [self getAssetsCountThread:tAssetDictionary[SHConfigurationAssetPath]];
+                    });
                 }
                 else
                 {
@@ -879,11 +881,13 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
                 
                 if (tString==nil)
                 {
-                    // Find the duration in a detached thread
-                    
+                    // Find the duration in a background thread
+
                     [tAssetTableView.durationLabel setStringValue:@"--:--:--"];
-                    
-                    [NSThread detachNewThreadSelector:@selector(getAssetDurationThread:) toTarget:self withObject:tAssetDictionary[SHConfigurationAssetPath]];
+
+                    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+                        [self getAssetDurationThread:tAssetDictionary[SHConfigurationAssetPath]];
+                    });
                 }
                 else
                 {

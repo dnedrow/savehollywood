@@ -13,8 +13,12 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSIndexSet (Analysis)
 
 - (BOOL)containsOnlyOneRange;
 
 @end
+
+NS_ASSUME_NONNULL_END

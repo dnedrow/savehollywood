@@ -1,8 +1,10 @@
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSArray (Shuffle)
 
-- (NSArray *)shuffledArray;
+- (nonnull NSArray *)shuffledArray;
 
 @end
 
@@ -11,3 +13,5 @@
 - (void)shuffle;
 
 @end
+
+NS_ASSUME_NONNULL_END

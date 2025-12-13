@@ -968,9 +968,7 @@ NSUInteger random_no(NSUInteger n)
                                  tCopyrightLayer.string = _currentAssetMetadataCopyrights;
 
                                  if (_metadadataMode == kMovieFrameShowMetadataAtStart) {
-                                     [self performSelectorOnMainThread:@selector(showMetadata:)
-                                                            withObject:nil
-                                                         waitUntilDone:NO];
+                                     [self showMetadata:nil];
                                  }
                              });
                          }

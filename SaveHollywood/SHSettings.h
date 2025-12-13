@@ -23,12 +23,14 @@ typedef NS_ENUM(NSUInteger, SHMovieAudioVolumeMode)
 #define SHUserDefaultsFrameShowMetadataPeriodMinimumValue   15
 #define SHUserDefaultsFrameShowMetadataPeriodMaximumValue   60
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SHSettings : NSObject
 
 @property BOOL randomOrder;
 @property BOOL startWhereLeftOff;
 
-@property (retain) NSMutableArray * assets;
+@property (strong) NSMutableArray<NSURL *> *assets;
 
 @property SHMovieScaling scaling;
 @property BOOL randomPosition;
@@ -38,7 +40,7 @@ typedef NS_ENUM(NSUInteger, SHMovieAudioVolumeMode)
 @property NSInteger showMetadataMode;
 @property NSInteger showMetadataPeriod;
 
-@property (copy) NSColor * backgroundColor;
+@property (copy) NSColor *backgroundColor;
 
 @property BOOL audioMainScreenOnly;
 @property SHMovieAudioVolumeMode audioMode;
@@ -46,16 +48,18 @@ typedef NS_ENUM(NSUInteger, SHMovieAudioVolumeMode)
 
 @property BOOL mainDisplayOnly;
 
-+ (SHSettings *)settings;
++ (nonnull SHSettings *)settings;
 
 + (BOOL)isConfigurationLocked;
 
-- (instancetype)initWithDictionaryRepresentation:(NSDictionary *)inDictionary;
+- (nullable instancetype)initWithDictionaryRepresentation:(nonnull NSDictionary *)inDictionary;
 
-- (NSDictionary *)dictionaryRepresentation;
+- (nonnull NSDictionary *)dictionaryRepresentation;
 
 - (void)resetSettings;
 
 
 
 @end
+
+NS_ASSUME_NONNULL_END

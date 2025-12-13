@@ -1,9 +1,13 @@
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSColor (String)
 
-+ (NSColor *)colorFromString:(NSString *)inString;
++ (nullable NSColor *)colorFromString:(nullable NSString *)inString;
 
-- (NSString *)stringValue;
+- (nonnull NSString *)stringValue;
 
 @end
+
+NS_ASSUME_NONNULL_END
