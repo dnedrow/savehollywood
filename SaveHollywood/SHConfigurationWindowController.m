@@ -1147,8 +1147,8 @@ NSString * const SHPasteboardTypeSelectedRows=@"savehollywood.pasterboardType.se
     
     if (tAVAsset.isPlayable==NO)
     {
-        // A COMPLETER
-        
+        NSLog(@"Asset is not playable: %@", inURL);
+
         return NO;
     }
     

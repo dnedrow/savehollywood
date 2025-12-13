@@ -642,10 +642,6 @@ NSUInteger random_no(NSUInteger n)
             
             if ([_fileManager fileExistsAtPath:tAbsolutePath]==YES)
             {
-                // Check whether the asset is not already being played
-                
-                // A COMPLETER
-                
                 tAsset=[AVURLAsset assetWithURL:tURL];
                 
                 if ([tAsset isPlayable]==NO)
@@ -687,12 +683,10 @@ NSUInteger random_no(NSUInteger n)
         else
         {
             // Remote URL
-            
-                // Skip remote URL for the time being
-            
+
+            // Skip remote URL for the time being
+
             __arrayIndex++;
-            
-            // A COMPLETER
         }
     }
     
@@ -741,10 +735,8 @@ NSUInteger random_no(NSUInteger n)
     
     if (_AVPlayerLayer==nil)
     {
-        // Display an error message instead of the movie
-        
-        // A COMPLETER
-        
+        NSLog(@"Failed to create AVPlayerLayer for asset: %@", tAsset.URL);
+
         return NO;
     }
     
@@ -1074,7 +1066,7 @@ NSUInteger random_no(NSUInteger n)
         
         if ([self playNextAsset:nil canPlaySameRandomMovieTwice:NO]==NO)
         {
-            // A COMPLETER
+            NSLog(@"Failed to play next asset after playback error");
         }
     }
 }

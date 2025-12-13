@@ -3,8 +3,8 @@
 @interface SHPlayingAssetsRegister ()
 {
     NSMutableSet * _playingAssetsSet;
-    
-    NSLock * _lock;
+
+    dispatch_queue_t _syncQueue;
 }
 
 @end
@@ -26,14 +26,14 @@
 - (instancetype)init
 {
     self=[super init];
-    
+
     if (self!=nil)
     {
         _playingAssetsSet=[[NSMutableSet alloc] init];
-        
-        _lock=[NSLock new];
+
+        _syncQueue=dispatch_queue_create("com.whitebox.savehollywood.playingassetsregister", DISPATCH_QUEUE_SERIAL);
     }
-    
+
     return self;
 }
 
@@ -41,14 +41,12 @@
 
 - (NSArray *)allPlayingAssets
 {
-    NSArray * tAllPlayingAssets=[NSArray array];
-    
-    [_lock lock];
-    
-    tAllPlayingAssets=[_playingAssetsSet allObjects];
-    
-    [_lock unlock];
-    
+    __block NSArray * tAllPlayingAssets;
+
+    dispatch_sync(_syncQueue, ^{
+        tAllPlayingAssets=[_playingAssetsSet allObjects];
+    });
+
     return tAllPlayingAssets;
 }
 
@@ -58,15 +56,13 @@
 {
     if (inAsset==nil)
         return NO;
-    
-    BOOL tIsPlaying=NO;
-    
-    [_lock lock];
-    
-    tIsPlaying=[_playingAssetsSet containsObject:inAsset];
-    
-    [_lock unlock];
-    
+
+    __block BOOL tIsPlaying=NO;
+
+    dispatch_sync(_syncQueue, ^{
+        tIsPlaying=[_playingAssetsSet containsObject:inAsset];
+    });
+
     return tIsPlaying;
 }
 
@@ -74,24 +70,20 @@
 {
     if (inAsset==nil)
         return;
-    
-    [_lock lock];
-    
-    [_playingAssetsSet addObject:inAsset];
-    
-    [_lock unlock];
+
+    dispatch_async(_syncQueue, ^{
+        [_playingAssetsSet addObject:inAsset];
+    });
 }
 
 - (void)removeAsset:(id)inAsset
 {
     if (inAsset==nil)
         return;
-    
-    [_lock lock];
-    
-    [_playingAssetsSet removeObject:inAsset];
-    
-    [_lock unlock];
+
+    dispatch_async(_syncQueue, ^{
+        [_playingAssetsSet removeObject:inAsset];
+    });
 }
 
 @end
