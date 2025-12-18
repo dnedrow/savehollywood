@@ -727,6 +727,11 @@ NSUInteger random_no(NSUInteger n)
 
     AVPlayer * tAVPlayer=[[AVPlayer alloc] initWithPlayerItem:tAVPlayerItem];
 
+    // Pause the old player before removing its layer to prevent audio from continuing
+    if (_AVPlayerLayer.player != nil)
+    {
+        [_AVPlayerLayer.player pause];
+    }
 
     [_AVPlayerLayer removeFromSuperlayer];
     _AVPlayerLayer=nil;
